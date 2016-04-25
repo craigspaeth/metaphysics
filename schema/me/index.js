@@ -7,9 +7,11 @@ import {
   GraphQLString,
   GraphQLObjectType,
   GraphQLNonNull,
+  GraphQLSchema,
+  graphql,
 } from 'graphql';
 
-const Me = new GraphQLObjectType({
+const MeType = new GraphQLObjectType({
   name: 'Me',
   fields: {
     id: {
@@ -31,16 +33,27 @@ const Me = new GraphQLObjectType({
           description: 'The GraphQL `me` query e.g. `{ id email }`',
         },
       },
-      resolve: (root, { id }) => {
-        console.log("RESOLVE", root, id);
-        return '';
+      resolve: (root, options, { rootValue: { accessToken } }) => {
+        const schema = new GraphQLSchema({
+          query: new GraphQLObjectType({
+            name: 'RootQueryType',
+            fields: { me: Me },
+          }),
+        });
+        return graphql(schema, options.query, { accessToken }).then((res) => {
+          console.log('END', res);
+          if (res.errors) throw new Error(res.errors);
+          return 'foo';
+        })
       },
     },
   },
 });
 
-export default {
-  type: Me,
+const Me = {
+  type: MeType,
   resolve: (root, options, { rootValue: { accessToken } }) =>
     gravity.with(accessToken)('me'),
 };
+
+export default Me
