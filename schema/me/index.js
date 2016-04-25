@@ -6,11 +6,9 @@ import SaleRegistrations from './sale_registrations';
 import {
   GraphQLString,
   GraphQLObjectType,
-  GraphQLNonNull,
-  GraphQLSchema,
 } from 'graphql';
 
-const MeType = new GraphQLObjectType({
+const Me = new GraphQLObjectType({
   name: 'Me',
   fields: {
     id: {
@@ -27,7 +25,7 @@ const MeType = new GraphQLObjectType({
 });
 
 export default {
-  type: MeType,
+  type: Me,
   resolve: (root, options, { rootValue: { accessToken } }) =>
     gravity.with(accessToken)('me'),
 };
