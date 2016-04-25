@@ -30,7 +30,6 @@ export default {
     return graphql(schema, `{ me ${options.query} }`, { accessToken })
       .then((res) => {
         if (res.errors) throw res.errors[0];
-        console.log('END', res.data.me);
         return jwt.encode(res.data.me, HMAC_SECRET);
       });
   },
