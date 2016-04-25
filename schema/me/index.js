@@ -6,6 +6,7 @@ import SaleRegistrations from './sale_registrations';
 import {
   GraphQLString,
   GraphQLObjectType,
+  GraphQLNonNull,
 } from 'graphql';
 
 const Me = new GraphQLObjectType({
@@ -21,6 +22,20 @@ const Me = new GraphQLObjectType({
     bidders: Bidders,
     bidder_positions: BidderPositions,
     sale_registrations: SaleRegistrations,
+    jwt: {
+      type: GraphQLString,
+      description: 'Encodes a GraphQL `me` query into a JSON Web Token',
+      args: {
+        query: {
+          type: new GraphQLNonNull(GraphQLString),
+          description: 'The GraphQL `me` query e.g. `{ id email }`',
+        },
+      },
+      resolve: (root, { id }) => {
+        console.log("RESOLVE", root, id);
+        return '';
+      },
+    },
   },
 });
 
