@@ -468,8 +468,12 @@ const Artwork = {
       type: new GraphQLNonNull(GraphQLString),
       description: 'The slug or ID of the Artwork',
     },
+    cached: {
+      type: GraphQLBoolean,
+      description: 'Work around the MP cache'
+    }
   },
-  resolve: (root, { id }) => gravity(`artwork/${id}`),
+  resolve: (root, { id, cached }) => gravity(`artwork/${id}`),
 };
 
 export default Artwork;
